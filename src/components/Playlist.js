@@ -13,6 +13,7 @@ class Playlist extends React.Component {
       tracks: this.props.tracks,
     }
   }
+
   // tracks will be re-ordered when a track is moved to the top
   reOrderTracks = (track_index) => {
     let tracks = this.state.tracks;
