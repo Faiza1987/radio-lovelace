@@ -10,12 +10,8 @@ class Track extends React.Component {
     super(props);
 
     this.state = {
-      // title: props.title,
-      // artist: props.artist,
-      // playtime: props.playtime,
-      // albumart: props.albumart,
       favorite: false,
-      index: props.index,
+      // index: props.index,
     };
   }
 
@@ -27,7 +23,7 @@ class Track extends React.Component {
   }
 
   moveToTop = () => {
-    this.props.moveToTopCallback(this.state.index);
+    this.props.moveToTopCallback(this.props.index);
   }
 
   render(){

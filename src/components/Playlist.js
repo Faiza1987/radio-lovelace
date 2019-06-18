@@ -9,61 +9,61 @@ class Playlist extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      // initial order of tracks
       tracks: this.props.tracks,
+      side: props.side,
     }
   }
 
   // tracks will be re-ordered when a track is moved to the top
-  reOrderTracks = (track_index) => {
-    let tracks = this.state.tracks;
-    // removes track that is at track_index and moves it and saves it in the track variable
-    const track = tracks.splice(track_index, 1)[0];
-
-    // adds track to the beginning of the array (playlist)
-    tracks.unshift(track);
+  reOrderTracks = (trackIndex) => {
+    let allTracks = this.state.tracks;
+    const removeTrack = allTracks[trackIndex];
+    allTracks.splice(trackIndex, 1);
+    allTracks.unshift(removeTrack);
 
     // sets state to reflect the new order of the songs
     this.setState({
-      tracks: tracks
+      tracks: allTracks,
     });
   }
 
-  calculatePlayTime = (tracks) => {
-    let minutes = 0;
-    let seconds = 0;
-    tracks.forEach((track) => {
-      const times = track.playtime.split(':');
-      minutes += parseInt(times[0]);
-      seconds += parseInt(times[1]);
-    });
-  
-    minutes += Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-  
-    seconds %= 60;
-    minutes %= 60;
-  
-    seconds = ("" + seconds).padStart(2, "0");
-    minutes = ("" + minutes).padStart(2, "0");
-  
-    return `${hours}:${minutes}:${seconds}`;
-  }
   render() {
-    const tracks = this.state.tracks;
+    const { tracks, side } = this.state;
+
+    const calculatePlayTime = (allTracks) => {
+      let minutes = 0;
+      let seconds = 0;
+
+      allTracks.forEach((track) => {
+        const times = track.playtime.split(':');
+        minutes += parseInt(times[0]);
+        seconds += parseInt(times[1]);
+      });
+    
+      minutes += Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+    
+      seconds %= 60;
+      minutes %= 60;
+    
+      seconds = ("" + seconds).padStart(2, "0");
+      minutes = ("" + minutes).padStart(2, "0");
+    
+      return `${hours}:${minutes}:${seconds}`;
+    }
+    // sconst allTracks = props.tracks;
     const trackCount = tracks.length;
-    const playtime = this.calculatePlayTime(tracks);
+    const playtime = calculatePlayTime(tracks);
     const trackElements = tracks.map((track, i) => {
       // We use "spread syntax" here to pass in all the properties of 
       // the variable 'track' as props. Go look it up!
       return (
         <Track
-          //key={track.id}
-          key={i}
-          index={i}
+          key={track.id}
+          // key={i}
           moveToTopCallback={this.reOrderTracks}
+          index={i}
           {...track}
-  
         />
       );
     });
